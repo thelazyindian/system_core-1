@@ -35,6 +35,7 @@
 
 using namespace android;
 
+#ifdef QCOM_HARDWARE
 #ifndef BOARD_PERIODIC_CHORES_INTERVAL_FAST
   // Periodic chores fast interval in seconds
   #define DEFAULT_PERIODIC_CHORES_INTERVAL_FAST (60 * 10)
@@ -47,6 +48,7 @@ using namespace android;
   #define DEFAULT_PERIODIC_CHORES_INTERVAL_SLOW (60 * 10)
 #else
   #define DEFAULT_PERIODIC_CHORES_INTERVAL_SLOW (BOARD_PERIODIC_CHORES_INTERVAL_SLOW)
+#endif
 #endif
 
 static struct healthd_config healthd_config = {
