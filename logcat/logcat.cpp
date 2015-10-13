@@ -406,6 +406,7 @@ static void show_help(const char *cmd)
                     "  -P '<list> ...', --prune='<list> ...'\n"
                     "                  Set prune white and ~black list, using same format as\n"
                     "                  listed above. Must be quoted.\n"
+                    "  -C              colored output\n"
                     "  --pid=<pid>     Only prints logs from the given pid.\n"
                     // Check ANDROID_LOG_WRAP_DEFAULT_TIMEOUT value for match to 2 hours
                     "  --wrap          Sleep for 2 hours or when buffer about to wrap whichever\n"
@@ -657,6 +658,7 @@ int main(int argc, char **argv)
           { "buffer",        required_argument, NULL,   'b' },
           { "buffer-size",   optional_argument, NULL,   'g' },
           { "clear",         no_argument,       NULL,   'c' },
+          { "color",         no_argument,       NULL,   'C' },
           { "dividers",      no_argument,       NULL,   'D' },
           { "file",          required_argument, NULL,   'f' },
           { "format",        required_argument, NULL,   'v' },
@@ -680,7 +682,7 @@ int main(int argc, char **argv)
           { NULL,            0,                 NULL,   0 }
         };
 
-        ret = getopt_long(argc, argv, ":cdDLt:T:gG:sQf:r:n:v:b:BSpP:m:e:w:",
+        ret = getopt_long(argc, argv, ":cdDLt:T:gG:sQf:r:n:v:b:BSpCP:m:e:",
                           long_options, &option_index);
 
         if (ret < 0) {
@@ -837,6 +839,10 @@ int main(int argc, char **argv)
 
             case 'P':
                 setPruneList = optarg;
+            break;
+
+            case 'C':
+                setLogFormat ("color");
             break;
 
             case 'b': {
