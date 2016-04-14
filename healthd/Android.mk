@@ -53,7 +53,7 @@ include $(BUILD_STATIC_LIBRARY)
 
 
 LOCAL_SRC_FILES := healthd_board_msm.cpp
-LOCAL_MODULE := libhealthd.msm
+LOCAL_MODULE := libhealthd.qcom
 LOCAL_CFLAGS := -Werror
 include $(BUILD_STATIC_LIBRARY)
 
@@ -109,7 +109,7 @@ endif
 LOCAL_HAL_STATIC_LIBRARIES := libhealthd
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
-BOARD_HAL_STATIC_LIBRARIES ?= libhealthd.msm
+BOARD_HAL_STATIC_LIBRARIES ?= libhealthd.qcom
 endif
 
 # Symlink /charger to /sbin/healthd
