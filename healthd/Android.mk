@@ -11,6 +11,14 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_SRC_FILES := healthd_board_msm.cpp
+LOCAL_MODULE := libhealthd.qcom
+LOCAL_CFLAGS := -Werror
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
+include $(BUILD_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_SRC_FILES := BatteryMonitor.cpp
 LOCAL_MODULE := libbatterymonitor
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
@@ -19,19 +27,15 @@ LOCAL_STATIC_LIBRARIES := libutils
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := healthd_board_msm.cpp
-LOCAL_MODULE := libhealthd.qcom
-LOCAL_CFLAGS := -Werror
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-include $(BUILD_STATIC_LIBRARY)
-
-
 ifeq ($(strip $(BOARD_CHARGER_ENABLE_SUSPEND)),true)
-include $(CLEAR_VARS)
 LOCAL_CFLAGS += -DCHARGER_ENABLE_SUSPEND
 LOCAL_SHARED_LIBRARIES += libsuspend
 endif
+
+ifeq ($(strip $(BOARD_NO_CHARGER_LED)),true)
+LOCAL_CFLAGS += -DNO_CHARGER_LED
+endif
+
 LOCAL_SRC_FILES := \
     healthd_mode_android.cpp \
     healthd_mode_charger.cpp \
@@ -59,7 +63,7 @@ LOCAL_STATIC_LIBRARIES := \
     libc \
 
 include $(BUILD_STATIC_LIBRARY)
-endif
+
 
 include $(CLEAR_VARS)
 
@@ -93,10 +97,6 @@ endif
 
 ifeq ($(strip $(BOARD_CHARGER_ENABLE_SUSPEND)),true)
 LOCAL_CFLAGS += -DCHARGER_ENABLE_SUSPEND
-endif
-
-ifeq ($(strip $(BOARD_NO_CHARGER_LED)),true)
-LOCAL_CFLAGS += -DNO_CHARGER_LED
 endif
 
 ifneq ($(BOARD_PERIODIC_CHORES_INTERVAL_FAST),)
@@ -135,7 +135,8 @@ endif
 
 # Symlink /charger to /sbin/healthd
 LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT) \
-    && rm -f $(TARGET_ROOT_OUT)/charger && ln -sf /sbin/healthd $(TARGET_ROOT_OUT)/charger
+    && rm -f $(TARGET_ROOT_OUT)/charger && \
+    ln -sf /sbin/healthd $(TARGET_ROOT_OUT)/charger
 
 include $(BUILD_EXECUTABLE)
 
