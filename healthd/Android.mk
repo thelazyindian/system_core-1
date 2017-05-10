@@ -51,7 +51,7 @@ LOCAL_STATIC_LIBRARIES := \
 
 include $(BUILD_STATIC_LIBRARY)
 
-
+include $(CLEAR_VARS)
 LOCAL_SRC_FILES := healthd_board_msm.cpp
 LOCAL_MODULE := libhealthd.qcom
 LOCAL_CFLAGS := -Werror
